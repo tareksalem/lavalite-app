@@ -1,0 +1,30 @@
+version: "3.9"
+name: test-lavalite
+services:
+  laravel:
+    container_name: test-lavalite
+    image: bitnami/laravel:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    deploy:
+      restart_policy:
+        condition: always
+    env_file:
+      # - ./.env.deployments_main
+      - ./.env
+    ports:
+      - 4002:8000
+    volumes:
+      - laravel-files:/app
+    # entrypoint: ["/bin/sh", "-c"]
+    # command: ["sh", "-c", "echo error"]
+    command: ["bash", "-c", "./s.sh"]
+
+volumes:
+  laravel-files:
+    name: lavalite-laravel-files
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/mnt/nvme0n1p3/zaClouds/laravel-tests/lavalite"
